@@ -10,6 +10,9 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+
+.env.local
+*.env
 .env
 
 # Package Files #

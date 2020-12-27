@@ -10,10 +10,31 @@
 
     <properties>
         <dependency.pretronic.databasequery.version>1.2.46.73-SNAPSHOT</dependency.pretronic.databasequery.version>
+        <dependency.mariadb.version>2.6.0</dependency.mariadb.version>
+        <dependency.mcnative.actionframework.sdk>1.0.7.17-SNAPSHOT</dependency.mcnative.actionframework.sdk>
+        <dependency.mcnative.actionframework.service>1.0.1.19-SNAPSHOT</dependency.mcnative.actionframework.service>
 
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>pretronic-internal</id>
+            <url>https://repository.pretronic.net/repository/pretronic-internal/</url>
+        </repository>
+        <repository>
+            <id>pretronic</id>
+            <url>https://repository.pretronic.net/repository/pretronic/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>pretronic</id>
+            <url>https://repository.pretronic.net/repository/pretronic-internal/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -23,21 +44,27 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.vdurmont</groupId>
-            <artifactId>emoji-java</artifactId>
-            <version>5.1.1</version>
+            <groupId>org.mcnative.actionframework.service</groupId>
+            <artifactId>mcnative-actionframework-service-connector-rabbitmq</artifactId>
+            <version>${dependency.mcnative.actionframework.service}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.mcnative.actionframework</groupId>
-            <artifactId>mcnative-actionframework-connector-rabbitmq</artifactId>
-            <version>1.0.0.0-SNAPSHOT</version>
+            <groupId>org.mcnative.actionframework.sdk</groupId>
+            <artifactId>mcnative-actionframework-sdk-actions</artifactId>
+            <version>${dependency.mcnative.actionframework.sdk}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.pretronic.databasequery</groupId>
             <artifactId>pretronicdatabasequery-sql</artifactId>
             <version>${dependency.pretronic.databasequery.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${dependency.mariadb.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -67,7 +94,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>PretronicDiscordBot</finalName>
+                            <finalName>McNativeMonitoringService</finalName>
                             <outputDirectory>build/</outputDirectory>
                         </configuration>
                     </execution>
@@ -80,7 +107,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>net.pretronic.discordbot.DiscordBotBootstrapKt</mainClass>
+                            <mainClass>org.mcnative.service.monitoring.McNativeMonitoringServiceBootstrap</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
