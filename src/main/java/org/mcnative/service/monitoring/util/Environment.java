@@ -12,6 +12,12 @@ public class Environment {
         return value;
     }
 
+    public static String getVariable(String name,String default0) {
+        String value = getVariableOrNull(name);
+        if(value == null) return default0;
+        return value;
+    }
+
     public static String getVariableOrNull(String name) {
         if (System.getenv(name) != null) {
             return System.getenv(name);

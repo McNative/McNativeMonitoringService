@@ -22,7 +22,7 @@ public class ClientConnectActionListener implements MAFActionListener<ClientConn
         this.monitoringService.logIncomingAction(executor, action);
         ServerInfo info = this.monitoringService.getStorageService().getServerStatus(executor);
         if(info != null && info.getStatus() == ServerStatus.NO_HEARTBEAT
-                && info.getLastStatusUpdate() > (System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(3))) {
+                && info.getLastStatusUpdate() > (System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(1))) {
             this.monitoringService.getStorageService().updateServerStatus(executor, ServerStatus.ONLINE);
         }
     }

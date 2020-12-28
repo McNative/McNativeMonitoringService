@@ -11,12 +11,9 @@ import net.pretronic.databasequery.sql.driver.config.SQLDatabaseDriverConfigBuil
 import net.pretronic.libraries.logging.PretronicLogger;
 import org.mcnative.actionframework.sdk.common.action.MAFActionExecutor;
 import org.mcnative.service.monitoring.util.Environment;
-import sun.rmi.runtime.Log;
 
 import java.net.InetSocketAddress;
 import java.sql.Timestamp;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class StorageService {
 
@@ -27,7 +24,7 @@ public class StorageService {
     private final DatabaseCollection serverCollection;
     private final DatabaseCollection serverDatabaseDriversCollection;
     private final DatabaseCollection serverPluginsCollection;
-    private final DatabaseCollection serverLogsCollection;
+    private final DatabaseCollection serverEventsCollection;
 
     public StorageService(PretronicLogger logger) {
         DatabaseDriverConfig<?> storageConfiguration = new SQLDatabaseDriverConfigBuilder()
@@ -47,7 +44,7 @@ public class StorageService {
         this.serverCollection = database.getCollection("mcnative_server");
         this.serverDatabaseDriversCollection = database.getCollection("mcnative_server_database_drivers");
         this.serverPluginsCollection = database.getCollection("mcnative_server_plugins");
-        this.serverLogsCollection = database.getCollection("mcnative_server_logs");
+        this.serverEventsCollection = database.getCollection("mcnative_server_events");
     }
 
     public DatabaseCollection getNetworkCollection() {
@@ -66,12 +63,12 @@ public class StorageService {
         return serverPluginsCollection;
     }
 
-    public DatabaseCollection getServerLogsCollection() {
-        return serverLogsCollection;
+    public DatabaseCollection getServerEventsCollection() {
+        return serverEventsCollection;
     }
 
     public void addServerLogEntry(MAFActionExecutor executor, LogAction action) {
-        this.serverLogsCollection.insert()
+        this.serverEventsCollection.insert()
                 .set("NetworkId", executor.getNetworkId().toString())
                 .set("ServerId", executor.getClientId().toString())
                 .set("Time", new Timestamp(System.currentTimeMillis()))

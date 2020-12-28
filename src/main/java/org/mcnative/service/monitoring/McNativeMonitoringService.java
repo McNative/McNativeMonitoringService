@@ -16,6 +16,7 @@ import org.mcnative.actionframework.sdk.common.action.MAFAction;
 import org.mcnative.actionframework.sdk.common.action.MAFActionExecutor;
 import org.mcnative.actionframework.service.connector.rabbitmq.MAFRabbitMQConnector;
 import org.mcnative.service.monitoring.listener.*;
+import org.mcnative.service.monitoring.tasks.CrashCheckTask;
 import org.mcnative.service.monitoring.util.Environment;
 
 public final class McNativeMonitoringService {
@@ -24,9 +25,10 @@ public final class McNativeMonitoringService {
     private final StorageService storageService;
     private final PretronicLogger logger;
 
-    public McNativeMonitoringService() {
-        this.logger = PretronicLoggerFactory.getLogger("McNativeMonitoringService");
-        SLF4JStaticBridge.setLogger(logger);
+    private final Thread crashCheckTask;
+
+    public McNativeMonitoringService(PretronicLogger logger) {
+        this.logger = logger;
 
         this.storageService = new StorageService(logger);
 
@@ -38,7 +40,8 @@ public final class McNativeMonitoringService {
         registerActionListeners();
         this.mafConnector.connect();
 
-
+        this.crashCheckTask = new CrashCheckTask(this);
+        startTasks();
     }
 
     private void registerActionListeners() {
@@ -51,6 +54,7 @@ public final class McNativeMonitoringService {
     }
 
     protected void stop() {
+        this.crashCheckTask.interrupt();
         this.mafConnector.disconnect();
     }
 
@@ -62,9 +66,17 @@ public final class McNativeMonitoringService {
         return logger;
     }
 
+    public MAFRabbitMQConnector getMafConnector() {
+        return mafConnector;
+    }
+
     public void logIncomingAction(MAFActionExecutor executor, MAFAction action) {
         getLogger().info("Received "+action.getNamespace()+"@"+action.getName()+" from "
                 + executor.getNetworkId().toString() + "@" + executor.getClientId().toString() + " " +
                 DocumentFileType.JSON.getWriter().write(Document.newDocument(action), false));
+    }
+
+    private void startTasks() {
+        this.crashCheckTask.start();
     }
 }

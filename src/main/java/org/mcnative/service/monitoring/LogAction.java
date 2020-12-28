@@ -4,5 +4,5 @@ public enum LogAction {
 
     STARTUP,
     SHUTDOWN,
-    CRASHED
+    CRASH
 }

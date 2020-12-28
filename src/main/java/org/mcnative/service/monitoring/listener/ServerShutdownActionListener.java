@@ -1,6 +1,7 @@
 package org.mcnative.service.monitoring.listener;
 
 import org.mcnative.actionframework.sdk.actions.server.ServerShutdownAction;
+import org.mcnative.actionframework.sdk.actions.server.ServerShutdownConfirmAction;
 import org.mcnative.actionframework.sdk.common.action.MAFActionExecutor;
 import org.mcnative.actionframework.sdk.common.action.MAFActionListener;
 import org.mcnative.service.monitoring.LogAction;
@@ -20,5 +21,7 @@ public class ServerShutdownActionListener implements MAFActionListener<ServerShu
         this.monitoringService.logIncomingAction(executor, action);
         this.monitoringService.getStorageService().addServerLogEntry(executor, LogAction.SHUTDOWN);
         this.monitoringService.getStorageService().updateServerStatus(executor, ServerStatus.OFFLINE);
+
+        this.monitoringService.getMafConnector().sendActionOnBehalf(executor, new ServerShutdownConfirmAction());
     }
 }
