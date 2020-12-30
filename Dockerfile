@@ -1,11 +1,6 @@
-FROM maven:3.6.3-jdk-14 AS build
-COPY src /usr/src/app/src
-COPY pom.xml /usr/src/app
-COPY /home/settings.xml settings.xml
+FROM java:8-jdk-alpine
 
-RUN mvn -f /usr/src/app/pom.xml clean package -Dmaven.test.skip=true -s settings.xml
+COPY ./build/McNativeMonitoringService.jar /usr/app/
 
-FROM openjdk:14-jdk-slim
-COPY --from=build /usr/src/app/target/McNativeMonitoringService.jar McNativeMonitoringService.jar
-
+WORKDIR /usr/app
 ENTRYPOINT ["java", "-jar", "McNativeMonitoringService.jar"]
