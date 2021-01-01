@@ -34,6 +34,7 @@ public class ServerStartupActionListener implements MAFActionListener<ServerStar
         boolean exists = resultEntry != null;
         if(exists) {
             this.monitoringService.getStorageService().getServerCollection().update()
+                    .set("Name", action.getName())
                     .set("Address", action.getAddress().getHostName())
                     .set("Port", action.getAddress().getPort())
                     .set("ServerGroup", action.getServerGroup())
@@ -61,6 +62,7 @@ public class ServerStartupActionListener implements MAFActionListener<ServerStar
             this.monitoringService.getStorageService().getServerCollection().insert()
                     .set("Id", executor.getClientId().toString())
                     .set("NetworkId", executor.getNetworkId().toString())
+                    .set("Name", action.getName())
                     .set("Address", action.getAddress().getHostName())
                     .set("Port", action.getAddress().getPort())
                     .set("ServerGroup", action.getServerGroup())
