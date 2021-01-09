@@ -18,11 +18,20 @@ public class ServerStatusActionListener implements MAFActionListener<ServerStatu
         this.monitoringService.logIncomingAction(executor, action);
         this.monitoringService.getStorageService().getServerCollection().update()
                 .set("MaximumPlayerCount", action.getMaximumPlayerCount())
-                .set("Tps", action.getTps())
+                .set("Tps", toCommaSeparated(action.getRecentTps()))
                 .set("UsedMemory", action.getUsedMemory())
                 .set("CpuUsage", action.getCpuUsage())
                 .where("Id", executor.getClientId().toString())
                 .where("NetworkId", executor.getNetworkId().toString())
                 .execute();
+    }
+
+    private static String toCommaSeparated(float[] values) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < values.length; i++) {
+            if(i > 0) builder.append(",");
+            builder.append(values[i]);
+        }
+        return builder.toString();
     }
 }
