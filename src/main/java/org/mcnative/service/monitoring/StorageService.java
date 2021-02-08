@@ -6,6 +6,7 @@ import net.pretronic.databasequery.api.driver.DatabaseDriver;
 import net.pretronic.databasequery.api.driver.DatabaseDriverFactory;
 import net.pretronic.databasequery.api.driver.config.DatabaseDriverConfig;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
+import net.pretronic.databasequery.api.query.type.UpdateQuery;
 import net.pretronic.databasequery.sql.dialect.Dialect;
 import net.pretronic.databasequery.sql.driver.config.SQLDatabaseDriverConfigBuilder;
 import net.pretronic.libraries.logging.PretronicLogger;
@@ -88,10 +89,15 @@ public class StorageService {
     }
 
     public void updateServerStatus(MAFActionExecutor executor, ServerStatus status) {
-        this.serverCollection.update()
+        UpdateQuery query = this.serverCollection.update()
                 .set("Status", status)
-                .set("LastStatusUpdate", new Timestamp(System.currentTimeMillis()))
-                .where("Id", executor.getClientId().toString())
+                .set("LastStatusUpdate", new Timestamp(System.currentTimeMillis()));
+        if(status == ServerStatus.OFFLINE) {
+            query.set("Tps", "0.0,0.0,0.0")
+                    .set("UsedMemory", 0)
+                    .set("CpuUsage", 0);
+        }
+        query.where("Id", executor.getClientId().toString())
                 .where("NetworkId", executor.getNetworkId().toString())
                 .execute();
     }

@@ -4,8 +4,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.logging.PretronicLogger;
-import net.pretronic.libraries.logging.PretronicLoggerFactory;
-import net.pretronic.libraries.logging.bridge.slf4j.SLF4JStaticBridge;
 import org.mcnative.actionframework.sdk.actions.client.ClientConnectAction;
 import org.mcnative.actionframework.sdk.actions.client.ClientDisconnectAction;
 import org.mcnative.actionframework.sdk.actions.server.ServerInfoAction;
