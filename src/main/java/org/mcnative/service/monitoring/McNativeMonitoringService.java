@@ -6,10 +6,7 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.logging.PretronicLogger;
 import org.mcnative.actionframework.sdk.actions.client.ClientConnectAction;
 import org.mcnative.actionframework.sdk.actions.client.ClientDisconnectAction;
-import org.mcnative.actionframework.sdk.actions.server.ServerInfoAction;
-import org.mcnative.actionframework.sdk.actions.server.ServerShutdownAction;
-import org.mcnative.actionframework.sdk.actions.server.ServerStartupAction;
-import org.mcnative.actionframework.sdk.actions.server.ServerStatusAction;
+import org.mcnative.actionframework.sdk.actions.server.*;
 import org.mcnative.actionframework.sdk.common.action.MAFAction;
 import org.mcnative.actionframework.sdk.common.action.MAFActionExecutor;
 import org.mcnative.actionframework.service.connector.rabbitmq.MAFRabbitMQConnector;
@@ -49,6 +46,7 @@ public final class McNativeMonitoringService {
         this.mafConnector.subscribeAction(ClientConnectAction.class, new ClientConnectActionListener(this));
         this.mafConnector.subscribeAction(ServerStatusAction.class, new ServerStatusActionListener(this));
         this.mafConnector.subscribeAction(ServerInfoAction.class, new ServerInfoActionListener(this));
+        this.mafConnector.subscribeAction(ServerShutdownConfirmAction.class, new ServerShutdownConfirmActionListener(this));
     }
 
     protected void stop() {
