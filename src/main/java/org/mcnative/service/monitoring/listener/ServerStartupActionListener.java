@@ -29,6 +29,7 @@ public class ServerStartupActionListener implements MAFActionListener<ServerStar
 
     private void createOrUpdateServer(MAFActionExecutor executor, ServerStartupAction action) {
         QueryResultEntry resultEntry = this.monitoringService.getStorageService().getServerCollection().find()
+                .where("NetworkId", executor.getNetworkId().toString())
                 .where("Id", executor.getClientId().toString())
                 .execute().firstOrNull();
         boolean exists = resultEntry != null;
