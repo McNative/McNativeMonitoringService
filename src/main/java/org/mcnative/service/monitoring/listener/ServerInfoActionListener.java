@@ -5,8 +5,6 @@ import org.mcnative.actionframework.sdk.common.action.MAFActionExecutor;
 import org.mcnative.actionframework.sdk.common.action.MAFActionListener;
 import org.mcnative.service.monitoring.McNativeMonitoringService;
 
-import java.util.UUID;
-
 public class ServerInfoActionListener implements MAFActionListener<ServerInfoAction> {
 
     private final McNativeMonitoringService monitoringService;
@@ -29,7 +27,7 @@ public class ServerInfoActionListener implements MAFActionListener<ServerInfoAct
                 .execute();
         for (ServerInfoAction.Plugin plugin : action.getPlugins()) {
             this.monitoringService.getStorageService().getServerPluginsCollection().insert()
-                    .set("Id", plugin.getId())
+                    .set("Id", plugin.getId().toString())
                     .set("ServerId", executor.getClientId().toString())
                     .set("NetworkId", executor.getNetworkId().toString())
                     .set("Name", plugin.getName())
